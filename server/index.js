@@ -30,7 +30,7 @@ const getAccessToken = async (req, res, next) => {
 
   await axios
     .get(
-      "https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
+      "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
       {
         headers: {
           authorization: `Basic ${auth}`,
@@ -53,7 +53,7 @@ app.post("/stk", getAccessToken, async (req, res) => {
   const phone = req.body.phone.substring(1); //formated to 72190........
   const amount = req.body.amount;
 
-  const date = new Date();
+  const date = new Date();174379174379
   const timestamp =
     date.getFullYear() +
     ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -61,8 +61,10 @@ app.post("/stk", getAccessToken, async (req, res) => {
     ("0" + date.getHours()).slice(-2) +
     ("0" + date.getMinutes()).slice(-2) +
     ("0" + date.getSeconds()).slice(-2);
-  const shortCode = process.env.MPESA_PAYBILL;
-  const passkey = process.env.MPESA_PASSKEY;
+  // const shortCode = process.env.MPESA_PAYBILL;
+  const shortCode = 174379;
+  // const passkey = process.env.MPESA_PASSKEY;
+  const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
 
   const callbackurl = process.env.CALLBACK_URL;
 
@@ -72,7 +74,7 @@ app.post("/stk", getAccessToken, async (req, res) => {
 
   await axios
     .post(
-      "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
       {
         BusinessShortCode: shortCode,
         Password: password,
@@ -80,11 +82,12 @@ app.post("/stk", getAccessToken, async (req, res) => {
         TransactionType: "CustomerPayBillOnline",
         Amount: amount,
         PartyA: `254${phone}`,
-        PartyB: 522522,
+        PartyB: 174379,
         PhoneNumber: `254${phone}`,
         CallBackURL: `${callbackurl}/${process.env.CALLBACK_ROUTE}`,
-        AccountReference: 1279306645,
-        TransactionDesc: "fortune dev",
+        // CallBackURL: "https://mydomain.com/pat", 
+        AccountReference: "Test",
+        TransactionDesc: "Test",
       },
       {
         headers: {
@@ -162,7 +165,7 @@ app.post("/stkpushquery", getAccessToken, async (req, res) => {
   await axios
 
     .post(
-      "https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query",
+      "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query",
       {
         BusinessShortCode: shortCode,
         Password: password,
@@ -175,8 +178,8 @@ app.post("/stkpushquery", getAccessToken, async (req, res) => {
         },
       }
     )
-    .then((responce) => {
-      res.status(200).json(responce.data);
+    .then((response) => {
+      res.status(200).json(response.data);
     })
     .catch((err) => {
       console.log(err.message);
@@ -187,17 +190,17 @@ app.post("/stkpushquery", getAccessToken, async (req, res) => {
 app.get("/transactions", (req, res) => {
   Transaction.find({})
     .sort({ createdAt: -1 })
-    .exec(function (err, data) {
-      if (err) {
-        res.status(400).json(err.message);
-      } else {
-        res.status(201).json(data);
-        // data.forEach((transaction) => {
-        //   const firstFour = transaction.customer_number.substring(0, 4);
-        //   const lastTwo = transaction.customer_number.slice(-2);
+    .then((data) => {
+      res.status(201).json(data);
+      // data.forEach((transaction) => {
+      //   const firstFour = transaction.customer_number.substring(0, 4);
+      //   const lastTwo = transaction.customer_number.slice(-2);
 
-        //   console.log(`${firstFour}xxxx${lastTwo}`);
-        // });
-      }
+      //   console.log(`${firstFour}xxxx${lastTwo}`);
+      // });
+    })
+    .catch((err) => {
+      res.status(400).json(err.message);
     });
 });
+

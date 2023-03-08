@@ -85,7 +85,8 @@ app.post("/stk", getAccessToken, async (req, res) => {
         PartyB: 174379,
         PhoneNumber: `254${phone}`,
         // CallBackURL: `${callbackurl}/${process.env.CALLBACK_ROUTE}`,
-        CallBackURL: "https://mydomain.com/pat", 
+        // CallBackURL: "https://mydomain.com/pat", 
+        CallBackURL: 'https://1ba7-154-159-237-36.in.ngrok.io',
         AccountReference: "Test",
         TransactionDesc: "Test",
       },
@@ -108,7 +109,8 @@ app.post("/stk", getAccessToken, async (req, res) => {
 
 //STEP 3 callback url
 const callback_route = process.env.CALLBACK_ROUTE;
-app.post(`/${callback_route}`, (req, res) => {
+app.post(`/${callback_route}/callback`, (req, res) => {
+// app.post("/callback", (req, res) => {
   if (!req.body.Body.stkCallback.CallbackMetadata) {
     console.log(req.body.Body.stkCallback.ResultDesc);
     res.status(200).json("ok");

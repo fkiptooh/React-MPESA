@@ -13,7 +13,7 @@ CD to each project folder and run npm install to get all your dependencies set u
 
 ## Install and set up Ngrok
 
-Once you install ngron and configure it right, the next assignment is to open in to the port your backend server is running on for instance **ngrok http 8000**
+Once you install ngrok and configure it right, the next assignment is to open in to the port your backend server is running on for instance **ngrok http 8000**
 
 ## Project Screenshot
 **Home Page**

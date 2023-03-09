@@ -6,6 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const Transaction = require("./models/transactionModel");
+const { request } = require("express");
 
 const port = process.env.PORT;
 
@@ -66,7 +67,8 @@ app.post("/stk", getAccessToken, async (req, res) => {
   // const passkey = process.env.MPESA_PASSKEY;
   const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
 
-  const callbackurl = process.env.CALLBACK_URL;
+  // const callbackurl = process.env.CALLBACK_URL;
+  const callbackUrl = "https://8e14-197-232-61-244.in.ngrok.io/callback";
 
   const password = new Buffer.from(shortCode + passkey + timestamp).toString(
     "base64"
@@ -86,7 +88,7 @@ app.post("/stk", getAccessToken, async (req, res) => {
         PhoneNumber: `254${phone}`,
         // CallBackURL: `${callbackurl}/${process.env.CALLBACK_ROUTE}`,
         // CallBackURL: "https://mydomain.com/pat", 
-        CallBackURL: 'https://1ba7-154-159-237-36.in.ngrok.io',
+        CallBackURL: 'https://8e14-197-232-61-244.in.ngrok.io/callback',
         AccountReference: "Test",
         TransactionDesc: "Test",
       },
@@ -108,14 +110,18 @@ app.post("/stk", getAccessToken, async (req, res) => {
 });
 
 //STEP 3 callback url
-const callback_route = process.env.CALLBACK_ROUTE;
-app.post(`/${callback_route}/callback`, (req, res) => {
-// app.post("/callback", (req, res) => {
-  if (!req.body.Body.stkCallback.CallbackMetadata) {
-    console.log(req.body.Body.stkCallback.ResultDesc);
+// const callback_route = process.env.CALLBACK_ROUTE;
+// app.post(`/${callback_route}`, (req, res) => {
+app.post("/callback", (req, res) => {
+  const callbackData = req.body;
+  // console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
+  if (!callbackData.Body.stkCallback.CallbackMetadata) {
+    // console.log(callbackData.stkCallback.ResultDesc);
+    console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
     res.status(200).json("ok");
     return;
   }
+  
 
   const amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
   const code = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;

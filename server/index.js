@@ -67,8 +67,8 @@ app.post("/stk", getAccessToken, async (req, res) => {
   // const passkey = process.env.MPESA_PASSKEY;
   const passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
 
-  // const callbackurl = process.env.CALLBACK_URL;
-  const callbackUrl = "https://8e14-197-232-61-244.in.ngrok.io/callback";
+  const callbackurl = process.env.CALLBACK_URL;
+  // const callbackUrl = "https://5003-197-232-61-244.in.ngrok.io/callback";
 
   const password = new Buffer.from(shortCode + passkey + timestamp).toString(
     "base64"
@@ -87,8 +87,9 @@ app.post("/stk", getAccessToken, async (req, res) => {
         PartyB: 174379,
         PhoneNumber: `254${phone}`,
         // CallBackURL: `${callbackurl}/${process.env.CALLBACK_ROUTE}`,
+        CallBackURL: callbackurl,
         // CallBackURL: "https://mydomain.com/pat", 
-        CallBackURL: 'https://8e14-197-232-61-244.in.ngrok.io/callback',
+        // CallBackURL: 'https://5003-197-232-61-244.in.ngrok.io/callback',
         AccountReference: "Test",
         TransactionDesc: "Test",
       },
@@ -114,10 +115,10 @@ app.post("/stk", getAccessToken, async (req, res) => {
 // app.post(`/${callback_route}`, (req, res) => {
 app.post("/callback", (req, res) => {
   const callbackData = req.body;
-  // console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
+  console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
   if (!callbackData.Body.stkCallback.CallbackMetadata) {
     // console.log(callbackData.stkCallback.ResultDesc);
-    console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
+    // console.log("Callback Body------>",callbackData.Body.stkCallback.CallbackMetadata);
     res.status(200).json("ok");
     return;
   }
@@ -125,10 +126,7 @@ app.post("/callback", (req, res) => {
 
   const amount = req.body.Body.stkCallback.CallbackMetadata.Item[0].Value;
   const code = req.body.Body.stkCallback.CallbackMetadata.Item[1].Value;
-  const phone1 =
-    req.body.Body.stkCallback.CallbackMetadata.Item[4].Value.toString().substring(
-      3
-    );
+  const phone1 = req.body.Body.stkCallback.CallbackMetadata.Item[4].Value.toString().substring(3);
   const phone = `0${phone1}`;
   // saving the transaction to db
   console.log({

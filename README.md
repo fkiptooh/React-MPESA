@@ -6,16 +6,16 @@ This is a MERN Stack project that uses Express and Node for backend and React on
 
 After you clone or download this project to your local directory, you can run:
 
-## `run npm install`
+## Run npm install
 
 CD to each project folder and run npm install to get all your dependencies set up for the project.(client and server)
 
 
-## `Ngrok`
+## Install and set up Ngrok
 
 Once you install ngron and configure it right, the next assignment is to open in to the port your backend server is running on for instance **ngrok http 8000**
 
-## `Project Screenshot`
+## Project Screenshot
 **Home Page**
 ![Home](https://github.com/fkiptooh/React-MPESA/blob/master/client/screenshots/homepage.png)
 
